@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "./ui/button";
+// import { Button } from "./ui/button";
 import Link from "next/link";
 
 const Navbar = () => {
