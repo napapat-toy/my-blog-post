@@ -13,39 +13,42 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "./ui/input";
-import { Card } from "./ui/card";
 import { useState } from "react";
-import { createPost } from "@/lib/actions/appwrite.action";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { createUser } from "@/lib/actions/user.action";
 
-const formSchema = z.object({
-  title: z.string().min(2).max(50),
-  description: z.string().max(200),
+const userSchema = z.object({
+  username: z.string().min(2).max(50),
+  name: z.string().min(2).max(50),
+  password: z.string().max(200),
 });
 
 const PostForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof userSchema>>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      username: "",
+      name: "",
+      password: "",
     },
   });
 
   const onSubmit = async ({
-    title,
-    description,
-  }: z.infer<typeof formSchema>) => {
+    username,
+    name,
+    password,
+  }: z.infer<typeof userSchema>) => {
     const data = {
-      title,
-      description,
-      userId: "1",  
+      username,
+      name,
+      password,
     };
 
     setIsLoading(true);
-    await createPost(data);
+    await createUser(data);
     setIsLoading(false);
 
     form.reset();
@@ -56,10 +59,10 @@ const PostForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="title"
+            name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input type="text" {...field} />
                 </FormControl>
@@ -69,12 +72,25 @@ const PostForm = () => {
           />
           <FormField
             control={form.control}
-            name="description"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -85,7 +101,7 @@ const PostForm = () => {
             disabled={isLoading}
             className="w-full bg-blue-800 hover:bg-blue-700"
           >
-            {isLoading ? "Submitting..." : "Submit"}
+            {isLoading ? "Creating..." : "Create User"}
           </Button>
         </form>
       </Form>
