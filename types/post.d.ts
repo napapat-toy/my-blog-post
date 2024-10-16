@@ -12,7 +12,7 @@ interface PostParams {
 }
 
 interface CreateUserParams {
+  email: string;
   username: string;
-  name: string;
   password: string;
 }

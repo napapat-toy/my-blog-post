@@ -17,9 +17,6 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { createUser } from "@/lib/actions/user.action";
-import { useRouter } from "next/navigation";
-import { account } from "@/lib/actions/client.action";
-
 
 const userSchema = z.object({
   email: z.string().min(2).max(50),
@@ -29,7 +26,6 @@ const userSchema = z.object({
 
 const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
@@ -52,22 +48,13 @@ const SignInPage = () => {
     };
 
     setIsLoading(true);
-    const newUser = await createUser(data);
-
-    if (!newUser) throw new Error("Create User failed");
-
-    const session = await account.createEmailPasswordSession(email, password);
-
-    console.log(session);
-    
-
+    await createUser(data);
     setIsLoading(false);
 
     form.reset();
-    router.push("/");
   };
   return (
-    <Card className="w-[300px] h-fit p-6 drop-shadow-lg">
+    <Card className="w-[300px] h-fit p-6 drop-shadow-lg lg:self-start">
       <Form {...form}>
         <h2 className="text-center font-semibold font-sans text-3xl mb-4">
           Sign In
@@ -80,7 +67,7 @@ const SignInPage = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" {...field} />
+                  <Input type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

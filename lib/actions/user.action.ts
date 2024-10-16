@@ -1,21 +1,22 @@
+"use server";
+
 import { ID } from "node-appwrite";
 import { users } from "../appwrite.config";
 import { parseStringify } from "../utils";
-// import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
-    // const saltRounds = 10;
+    const saltRounds = 10;
 
-    // const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+    const hashedPassword = await bcrypt.hash(user.password, saltRounds);
 
     const newUser = await users.create(
       ID.unique(),
-      user.username,
+      user.email,
       undefined,
-      undefined,
-    //   hashedPassword,
-      user.name
+      hashedPassword,
+      user.username
     );
 
     return parseStringify(newUser);

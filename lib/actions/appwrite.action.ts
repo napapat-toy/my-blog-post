@@ -16,7 +16,7 @@ export const getPosts = async () => {
       POSTS_COLLECTION_ID!
     );
 
-    console.log(posts);
+    // console.log(posts);
 
     return parseStringify(posts);
   } catch (error) {
